@@ -1,0 +1,138 @@
+# zsh4humans: shell rapido, Powerlevel10k, FZF, autosuggestions e highlighting.
+# Dotfiles gerenciados via chezmoi (~/.local/share/chezmoi). Editar com `chezmoi edit ~/.zshrc`.
+zstyle ':z4h:' auto-update 'yes'
+zstyle ':z4h:' auto-update-days '14'
+zstyle ':z4h:bindkey' keyboard 'pc'
+zstyle ':z4h:' start-tmux 'no'  # Troque para 'command tmux' para ativar.
+zstyle ':z4h:' term-shell-integration 'yes'
+zstyle ':z4h:autosuggestions' forward-char 'accept'
+zstyle ':z4h:fzf-complete' recurse-dirs 'no'
+zstyle ':z4h:direnv' enable 'no' # Ative depois de instalar e auditar seus .envrc.
+zstyle ':z4h:direnv:success' notify 'yes'
+# Instalacao em maquinas remotas e feita sob demanda via chezmoi (ver README),
+# entao o hijack automatico do `ssh` fica desligado: nada e instalado sem voce pedir.
+zstyle ':z4h:ssh:*' enable 'no'
+
+# Gerenciamento declarativo: `z4h update` atualiza o framework e estes repositorios
+# (auto-update 'yes' acima ja faz isso sozinho a cada 14 dias, em background).
+z4h install ohmyzsh/ohmyzsh || return
+z4h init || return
+
+# Plugins pequenos e pertinentes. O z4h ja fornece autosuggestions/highlighting/FZF.
+# O plugin docker do Oh My Zsh grava a completion gerada neste diretorio,
+# que nao e criado quando os plugins sao carregados isoladamente via z4h.
+mkdir -p -- "$ZSH_CACHE_DIR/completions"
+z4h load ohmyzsh/ohmyzsh/plugins/git
+z4h load ohmyzsh/ohmyzsh/plugins/docker
+z4h load ohmyzsh/ohmyzsh/plugins/docker-compose
+z4h load ohmyzsh/ohmyzsh/plugins/sudo
+z4h load ohmyzsh/ohmyzsh/plugins/extract
+z4h load ohmyzsh/ohmyzsh/plugins/colored-man-pages
+z4h load ohmyzsh/ohmyzsh/plugins/command-not-found
+
+typeset -U path PATH
+path=("$HOME/bin" "$HOME/.local/bin" /usr/local/bin $path)
+[[ -r "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
+export LANG="${LANG:-en_US.UTF-8}"
+export GPG_TTY="${TTY:-$(tty 2>/dev/null)}"
+export EDITOR=micro
+export VISUAL=micro
+export PAGER=less
+export LESS='-FRX'
+
+# Segredos e ajustes exclusivos desta maquina ficam fora do repositorio.
+z4h source ~/.env.zsh
+
+# Historico compartilhado, sem duplicatas.
+HISTFILE="${ZDOTDIR:-$HOME}/.zsh_history"
+HISTSIZE=100000
+SAVEHIST=100000
+setopt append_history extended_history hist_expire_dups_first hist_ignore_all_dups
+setopt hist_ignore_space hist_reduce_blanks share_history
+setopt auto_cd auto_pushd pushd_ignore_dups pushd_silent
+setopt interactive_comments glob_dots
+
+# TAB abre o menu (com descricoes fornecidas pelas completions); FZF assume listas grandes.
+zstyle ':completion:*' menu select
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:descriptions' format '%F{yellow}%d%f'
+zstyle ':completion:*:commands' group-order aliases builtins functions commands
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+setopt auto_menu complete_in_word
+unsetopt menu_complete
+
+z4h bindkey z4h-backward-kill-word Ctrl+Backspace Ctrl+H
+z4h bindkey z4h-backward-kill-zword Ctrl+Alt+Backspace
+z4h bindkey undo Ctrl+/ Shift+Tab
+z4h bindkey redo Alt+/
+z4h bindkey z4h-cd-back Alt+Left
+z4h bindkey z4h-cd-forward Alt+Right
+z4h bindkey z4h-cd-up Alt+Up
+z4h bindkey z4h-cd-down Alt+Down
+
+autoload -Uz zmv
+function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
+compdef _directories md
+
+# ssh normal por padrao (z4h:ssh:* enable 'no' acima). `zssh host` liga a
+# sincronizacao do z4h (agent forwarding, control master, envio de dotfiles)
+# so para essa conexao, sem tocar na config global nem nas demais conexoes.
+function zssh() {
+  [[ $# -ge 1 ]] || { print -u2 "uso: zssh usuario@host"; return 1 }
+  zstyle ":z4h:ssh:${${@[-1]}#*@}" enable yes
+  z4h ssh "$@"
+}
+compdef _ssh zssh=ssh
+
+# Gerais e edicao.
+alias cls='clear'
+alias zshrc='chezmoi edit ~/.zshrc'
+alias reload='exec zsh'
+alias l='ls -CF'
+alias ll='ls -alF'
+alias la='ls -A'
+alias tree='tree -a -I .git'
+
+# Dotfiles (chezmoi).
+alias dot='chezmoi'
+alias dotd='chezmoi diff'
+alias dota='chezmoi apply -v'
+alias dotcd='chezmoi cd'
+
+# Git.
+alias g='git'
+alias gst='git status --short --branch'
+alias gl='git log --oneline --decorate --graph --all'
+alias gd='git diff'
+alias gds='git diff --staged'
+
+# Containers.
+alias d='docker'
+alias dc='docker compose'
+alias dpsf='docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.RunningFor}}\t{{truncate .Ports 60}}"'
+alias dpsa='docker ps -a --format "table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.RunningFor}}\t{{truncate .Ports 60}}"'
+alias dlog='docker logs --tail 200 --follow'
+
+# SRE, rede e diagnostico.
+alias uports='sudo ss -lptr | cat'
+alias ports='ss -lntup'
+alias myip='curl -fsS https://ifconfig.me; print'
+alias pingg='ping 1.1.1.1'
+alias pathlist='print -l -- $path'
+
+# NVM sob demanda: evita executar nvm.sh em todo shell novo.
+export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+function _load_nvm() {
+  unfunction nvm node npm npx 2>/dev/null
+  if [[ ! -s "$NVM_DIR/nvm.sh" ]]; then
+    print -u2 "NVM nao encontrado em $NVM_DIR"
+    return 127
+  fi
+  source "$NVM_DIR/nvm.sh"
+}
+function nvm()  { _load_nvm || return; nvm "$@" }
+function node() { _load_nvm || return; node "$@" }
+function npm()  { _load_nvm || return; npm "$@" }
+function npx()  { _load_nvm || return; npx "$@" }
+
+[[ -r ~/.p10k.zsh ]] && source ~/.p10k.zsh
