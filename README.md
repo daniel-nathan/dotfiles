@@ -42,7 +42,7 @@ Instalar o ambiente inteiro (zsh, tema, plugins, aliases) numa maquina nova e se
 uma acao explicita, rodada uma vez por maquina — nunca automatica:
 
 ```sh
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply Danielnatham/dotfiles
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply daniel-nathan/dotfiles
 ```
 
 Isso instala o chezmoi (se preciso), clona este repo e aplica os dotfiles. Na primeira
