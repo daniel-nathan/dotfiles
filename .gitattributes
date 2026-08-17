@@ -1,0 +1,12 @@
+# Forcar LF em arquivos de shell e configuracao
+*.sh     text eol=lf
+*.zsh    text eol=lf
+*.conf   text eol=lf
+*.json   text eol=lf
+*.jsonc  text eol=lf
+*.yml    text eol=lf
+*.yaml   text eol=lf
+*.md     text eol=lf
+*.tmpl   text eol=lf
+*.desktop text eol=lf
+*.pref   text eol=lf

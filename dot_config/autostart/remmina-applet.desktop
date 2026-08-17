@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Remmina Applet
+Exec=remmina-applet
+Icon=remmina
+Terminal=false
+X-GNOME-Autostart-enabled=true

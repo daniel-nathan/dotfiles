@@ -1,0 +1,16 @@
+[core]
+	editor = code --wait
+	autocrlf = true
+[credential]
+	credentialStore = secretservice
+	helper = libsecret
+[pull]
+	rebase = false
+[includeIf "gitdir:~/work/zanthus/"]
+	path = ~/work/zanthus/.gitconfig
+[includeIf "gitdir:~/work/projetos/"]
+	path = ~/work/junta/.gitconfig
+[push]
+	autoSetupRemote = true
+[safe]
+	directory = /home/dan/work/zanthus/zeus-workspace/padr/PADR

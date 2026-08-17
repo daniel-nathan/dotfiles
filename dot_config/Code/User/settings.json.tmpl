@@ -1,0 +1,189 @@
+{{- if eq .chezmoi.os "linux" -}}
+{{- $desktop := (env "XDG_CURRENT_DESKTOP" | default "GNOME") -}}
+{
+	"editor.fontFamily": "JetBrainsMono Nerd Font, Hack Nerd Font, Consolas",
+	"editor.renderWhitespace": "boundary",
+	"editor.lineHeight": 22,
+	"editor.fontSize": 12,
+	"workbench.tree.indent": 24,
+	"explorer.compactFolders": false,
+	"editor.fontLigatures": true,
+	"editor.suggestSelection": "first",
+	"editor.minimap.showSlider": "always",
+	"editor.semanticHighlighting.enabled": true,
+	"editor.tokenColorCustomizations": {
+		"textMateRules": [
+			{
+				"scope": "keyword",
+				"settings": { "fontStyle": "bold" }
+			},
+			{
+				"scope": "storage",
+				"settings": { "fontStyle": "bold" }
+			},
+			{
+				"scope": "constant.language",
+				"settings": { "fontStyle": "bold" }
+			},
+			{
+				"scope": "support.class.builtin",
+				"settings": { "fontStyle": "bold" }
+			}
+		]
+	},
+	"editor.accessibilitySupport": "off",
+	"editor.multiCursorLimit": 100000,
+	"editor.fontVariations": true,
+	"editor.renderFinalNewline": "on",
+	"material-icon-theme.logLevel": "error",
+	"material-icon-theme.folders.theme": "specific",
+	"material-icon-theme.folders.color": "#90a4ae",
+	"material-icon-theme.folders.associations": {
+		"Repositories": "Database",
+		"Requests": "Guard",
+		"storage": "Dist",
+		"Exceptions": "Private",
+		"Http": "Global",
+		"classes": "Class",
+		"Javascript": "Javascript"
+	},
+	"material-icon-theme.files.associations": {
+		"**.inc": "Php_elephant",
+		"**.php": "Php_elephant"
+	},
+	"diffEditor.ignoreTrimWhitespace": true,
+	"diffEditor.renderSideBySideInlineBreakpoint": 1000,
+	"diffEditor.renderSideBySide": false,
+	"terminal.integrated.fontFamily": "Hack Nerd Font Mono, Hack, JetBrainsMono Nerd Font, Consolas",
+	"terminal.integrated.fontLigatures.enabled": false,
+	"terminal.integrated.fontSize": 12,
+	"terminal.integrated.lineHeight": 1.3,
+	"terminal.integrated.gpuAcceleration": "on",
+	"terminal.integrated.defaultProfile.linux": "zsh",
+	"terminal.integrated.profiles.linux": {
+		"zsh": {
+			"path": "zsh",
+			"icon": "terminal-bash"
+		},
+		"bash": {
+			"path": "bash",
+			"icon": "terminal-bash"
+		}
+	},
+	"git.autofetch": true,
+	"git.suggestSmartCommit": false,
+	"git.confirmSync": false,
+	"git.openRepositoryInParentFolders": "never",
+	"files.associations": {
+		"*.module": "php",
+		"*.css": "css",
+		"*.scss": "scss",
+		"*.xml": "xml",
+		"*.inc": "php",
+		"*.php5": "php",
+		"*.XML": "xml",
+		"*.zlg": "plaintext",
+		"*.http": "http"
+	},
+	"files.exclude": {
+		"**/.classpath": true,
+		"**/.factorypath": true,
+		"**/.git": false,
+		"**/.project": true
+	},
+	"files.saveConflictResolution": "overwriteFileOnDisk",
+	"files.autoSave": "onFocusChange",
+	"explorer.confirmDelete": false,
+	"search.quickAccess.preserveInput": true,
+	"search.useIgnoreFiles": false,
+	"security.workspace.trust.untrustedFiles": "open",
+	"security.workspace.trust.enabled": false,
+	"security.workspace.trust.banner": "always",
+	"security.workspace.trust.startupPrompt": "once",
+	"[dockercompose]": {
+		"editor.defaultFormatter": "redhat.vscode-yaml"
+	},
+	"[sql]": {
+		"editor.defaultFormatter": "inferrinizzard.prettier-sql-vscode"
+	},
+	"[xml]": {
+		"editor.defaultFormatter": "redhat.vscode-xml"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "vscode.json-language-features"
+	},
+	"[jsonc]": {
+		"editor.defaultFormatter": "vscode.json-language-features"
+	},
+	"[php]": {
+		"editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+	},
+	"errorLens.enabledDiagnosticLevels": ["error", "warning"],
+	"cSpell.language": "en,pt-BR",
+	"chat.mcp.gallery.enabled": true,
+	"chat.mcp.autostart": "never",
+	"chat.editing.autoAcceptDelay": 10,
+	"github.copilot.chat.alternateGptPrompt.enabled": true,
+	"github.copilot.chat.codesearch.enabled": true,
+	"github.copilot.chat.anthropic.tools.websearch.enabled": true,
+	"github.copilot.chat.anthropic.tools.websearch.userLocation": {
+		"city": "São Paulo",
+		"region": "SP",
+		"country": "BR"
+	},
+	"github.copilot.chat.languageContext.fix.typescript.enabled": true,
+	"github.copilot.chat.localeOverride": "pt-br",
+	"github.copilot.nextEditSuggestions.enabled": true,
+	"github.copilot.enable": {
+		"*": true,
+		"plaintext": true,
+		"markdown": true,
+		"scminput": true
+	},
+	"github.copilot.chat.notebook.enhancedNextEditSuggestions.enabled": true,
+	"github.copilot.chat.githubMcpServer.enabled": false,
+	"github.copilot.chat.responsesApiContextManagement.enabled": false,
+	"github.copilot.chat.switchAgent.enabled": true,
+	"gitlens.views.commitDetails.files.layout": "tree",
+	"gitlens.views.scm.grouped.views": {
+		"commits": true,
+		"branches": true,
+		"remotes": true,
+		"stashes": true,
+		"tags": true,
+		"worktrees": true,
+		"contributors": true,
+		"fileHistory": true,
+		"repositories": true,
+		"searchAndCompare": false,
+		"launchpad": false
+	},
+	"debug.breakpointsView.presentation": "tree",
+	"cmake.automaticReconfigure": false,
+	"cmake.configureOnOpen": false,
+	"ini.parse.inlineCommentMode": "smart",
+	"C_Cpp.intelliSenseEngine": "disabled",
+	"editor.unicodeHighlight.nonBasicASCII": false,
+	"xml.server.vmargs": "-Xmx128M",
+	"containers.containerClient": "com.microsoft.visualstudio.containers.docker",
+	"containers.orchestratorClient": "com.microsoft.visualstudio.orchestrators.dockercompose",
+	"extensions.ignoreRecommendations": true,
+	"editor.minimap.autohide": "mouseover",
+	"editor.minimap.sectionHeaderFontSize": 0,
+	"window.autoDetectHighContrast": false,
+	"window.confirmBeforeClose": "keyboardOnly",
+	"window.menuBarVisibility": "compact",
+	"window.commandCenter": false,
+	"window.newWindowProfile": "Default",
+	"workbench.activityBar.location": "top",
+	"workbench.activityBar.autoHide": true,
+	"workbench.layoutControl.enabled": false,
+	"workbench.browser.showInTitleBar": false,
+	"workbench.colorTheme": "Best Themes - Brogrammer",
+	"workbench.productIconTheme": "icons-carbon",
+	"workbench.startupEditor": "none",
+	"workbench.iconTheme": "symbols",
+	"claudeCode.useTerminal": true,
+	"chat.viewSessions.orientation": "stacked"
+}
+{{- end }}
