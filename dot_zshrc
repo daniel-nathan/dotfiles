@@ -43,6 +43,12 @@ export LESS='-FRX'
 # Segredos e ajustes exclusivos desta maquina ficam fora do repositorio.
 z4h source ~/.env.zsh
 
+# .bashrc (via /etc/bashrc) usa `shopt`, builtin exclusivo do bash que nao
+# existe no zsh. Stub temporario so durante o source, sem tocar em /etc/bashrc.
+function shopt() { return 0 }
+[[ -r ~/.bashrc ]] && source ~/.bashrc
+unfunction shopt
+
 # Historico compartilhado, sem duplicatas.
 HISTFILE="${ZDOTDIR:-$HOME}/.zsh_history"
 HISTSIZE=100000
